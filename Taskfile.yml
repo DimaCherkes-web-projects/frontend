@@ -1,0 +1,33 @@
+version: "3"
+
+vars:
+  FRONTEND_DOCKER_FILE: ./build/local/Dockerfile
+  FRONTEND_DOCKER_IMAGE: web-projects-fronted
+  FRONTEND_DOCKER_CONTAINER: web-projects-fronted-container
+
+tasks:
+  build:
+    desc: "Build the Docker image"
+    cmds:
+      - docker build -t {{.FRONTEND_DOCKER_IMAGE}} -f {{.FRONTEND_DOCKER_FILE}} .
+
+  run:
+    desc: "Run the Docker container"
+    cmds:
+      - docker run -d -p 8081:80 --name {{.FRONTEND_DOCKER_CONTAINER}} {{.FRONTEND_DOCKER_IMAGE}}
+
+  stop:
+    desc: "Stop the Docker container"
+    cmds:
+      - docker stop {{.FRONTEND_DOCKER_CONTAINER}}
+
+  down:
+    desc: "Stop and remove the Docker container"
+    cmds:
+      - docker stop {{.FRONTEND_DOCKER_CONTAINER}}
+      - docker rm {{.FRONTEND_DOCKER_CONTAINER}}
+
+  logs:
+    desc: "Show the logs of the Docker container"
+    cmds:
+      - docker logs -f {{.FRONTEND_DOCKER_CONTAINER}}
