@@ -6,9 +6,18 @@ defineProps({
   },
 });
 
-async function fetchMac() {
-  const res = await fetch('/api/mac.php');
-  console.log(await res.text());
+async function login() {
+  console.log('login');
+  const response = await fetch('https://localhost/api/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username: 'admin', password: 'admin' }),
+  });
+
+  const data = await response.json();
+  console.log(data);
 }
 </script>
 
@@ -21,7 +30,7 @@ async function fetchMac() {
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
     </h3>
 
-    <button @click="fetchMac">Fetch Mac</button>
+    <button @click="login">Login</button>
   </div>
 </template>
 

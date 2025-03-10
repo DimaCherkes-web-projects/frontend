@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
@@ -14,5 +14,12 @@ RUN npm install
 # Copy the rest of the files
 COPY . .
 
-# Start the app
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "80"]
+RUN npm run build
+
+# Production image
+FROM httpd:2.4-alpine
+
+RUN apk add --no-cache curl
+
+COPY --from=build /app/dist /usr/local/apache2/htdocs/
+
